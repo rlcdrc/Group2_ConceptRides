@@ -318,6 +318,25 @@
       color: #ffcc00;
     }
 
+    /* Password Strength Meter */
+    .password-strength {
+      height: 5px;
+      background: #3a4a5a;
+      border-radius: 3px;
+      margin-top: 5px;
+      overflow: hidden;
+    }
+
+    .strength-meter {
+      height: 100%;
+      width: 0%;
+      transition: width 0.3s, background 0.3s;
+    }
+
+    .strength-weak { background: #e74c3c; width: 33%; }
+    .strength-medium { background: #f39c12; width: 66%; }
+    .strength-strong { background: #4CAF50; width: 100%; }
+
     /* Responsive */
     @media (max-width: 768px) {
       .form-grid {
@@ -365,6 +384,8 @@
       <button class="tab" data-tab="product">📦 Product Form</button>
       <button class="tab" data-tab="pos">💰 POS Transaction</button>
       <button class="tab" data-tab="feedback">💬 Feedback</button>
+      <button class="tab" data-tab="inventory">📦 Inventory Management</button>
+      <button class="tab" data-tab="profile">👤 Profile</button>
     </div>
 
     <!-- Login Form (Supporting Form 1) -->
@@ -384,6 +405,9 @@
             <input type="password" id="loginPassword" name="password" required 
                    placeholder="••••••••" tabindex="2">
             <div class="error-message" id="loginPasswordError"></div>
+            <div class="password-strength">
+              <div class="strength-meter" id="passwordStrength"></div>
+            </div>
           </div>
         </div>
 
@@ -448,10 +472,15 @@
           </div>
 
           <div class="form-group">
+            <label for="warrantyExpiry">Warranty Expiry Date</label>
+            <input type="date" id="warrantyExpiry" name="warranty" min="" max="" tabindex="11">
+          </div>
+
+          <div class="form-group">
             <label>Active Status</label>
             <div class="toggle-container">
               <label class="toggle-switch">
-                <input type="checkbox" id="isActive" name="active" checked tabindex="11">
+                <input type="checkbox" id="isActive" name="active" checked tabindex="12">
                 <span class="slider"></span>
               </label>
               <span>Active</span>
@@ -462,21 +491,21 @@
         <div class="form-group">
           <label for="description">Description</label>
           <textarea id="description" name="description" rows="3" maxlength="500"
-                    placeholder="Product details, compatibility, etc." tabindex="12"></textarea>
+                    placeholder="Product details, compatibility, etc." tabindex="13"></textarea>
         </div>
 
         <div class="form-group">
           <label for="image">Product Image (Optional)</label>
-          <input type="file" id="image" name="image" accept="image/*" tabindex="13">
+          <input type="file" id="image" name="image" accept="image/*" tabindex="14">
           <small style="color:#7f8c8d; display:block; margin-top:5px;">
             Supported: JPG, PNG, GIF (max 5MB)
           </small>
         </div>
 
         <div class="btn-group">
-          <button type="submit" class="btn-primary" tabindex="14">💾 Save Product</button>
-          <button type="reset" class="btn-outline" tabindex="15">↺ Reset</button>
-          <button type="button" class="btn-danger" id="cancelProduct" tabindex="16">✕ Cancel</button>
+          <button type="submit" class="btn-primary" tabindex="15">💾 Save Product</button>
+          <button type="reset" class="btn-outline" tabindex="16">↺ Reset</button>
+          <button type="button" class="btn-danger" id="cancelProduct" tabindex="17">✕ Cancel</button>
         </div>
       </form>
     </div>
@@ -489,13 +518,24 @@
           <div class="form-group">
             <label for="customerName">Customer Name</label>
             <input type="text" id="customerName" name="customer" maxlength="100"
-                   placeholder="Walk-in or enter name" tabindex="17">
+                   placeholder="Walk-in or enter name" tabindex="18">
           </div>
 
           <div class="form-group">
             <label for="searchProduct">Search Product</label>
-            <input type="text" id="searchProduct" placeholder="Type product name..." tabindex="18">
+            <input type="text" id="searchProduct" placeholder="Type product name..." tabindex="19">
             <div id="productSuggestions" style="background:#1a2938; border:1px solid #3a4a5a; border-radius:4px; margin-top:5px; display:none;"></div>
+          </div>
+
+          <div class="form-group">
+            <label for="productCategoryFilter">Filter by Category</label>
+            <select id="productCategoryFilter" name="categoryFilter" tabindex="20">
+              <option value="">All Categories</option>
+              <option value="parts">Parts</option>
+              <option value="accessories">Accessories</option>
+              <option value="apparel">Apparel</option>
+              <option value="tools">Tools</option>
+            </select>
           </div>
         </div>
 
@@ -524,15 +564,15 @@
             <label class="required">Payment Method</label>
             <div class="radio-group">
               <div class="radio-option">
-                <input type="radio" id="cash" name="payment" value="cash" required checked tabindex="19">
+                <input type="radio" id="cash" name="payment" value="cash" required checked tabindex="21">
                 <label for="cash">Cash</label>
               </div>
               <div class="radio-option">
-                <input type="radio" id="gcash" name="payment" value="gcash" tabindex="20">
+                <input type="radio" id="gcash" name="payment" value="gcash" tabindex="22">
                 <label for="gcash">GCash</label>
               </div>
               <div class="radio-option">
-                <input type="radio" id="card" name="payment" value="card" tabindex="21">
+                <input type="radio" id="card" name="payment" value="card" tabindex="23">
                 <label for="card">Card</label>
               </div>
             </div>
@@ -542,20 +582,25 @@
           <div class="form-group">
             <label for="amountTendered" class="required">Amount Tendered (PHP)</label>
             <input type="number" id="amountTendered" name="tendered" min="0" step="0.01"
-                   placeholder="0.00" tabindex="22">
+                   placeholder="0.00" tabindex="24">
             <div class="error-message" id="amountTenderedError"></div>
           </div>
 
           <div class="form-group">
             <label for="discount">Discount (%)</label>
             <input type="number" id="discount" name="discount" min="0" max="100" step="0.5"
-                   placeholder="0.0" tabindex="23">
+                   placeholder="0.0" tabindex="25">
+          </div>
+
+          <div class="form-group">
+            <label for="discountSlider">Discount Amount: <span id="discountValue">0</span>%</label>
+            <input type="range" id="discountSlider" name="discountSlider" min="0" max="50" step="0.5" value="0" tabindex="26">
           </div>
 
           <div class="form-group">
             <label for="receiptEmail">Email Receipt</label>
             <input type="email" id="receiptEmail" name="email" 
-                   placeholder="customer@email.com" tabindex="24">
+                   placeholder="customer@email.com" tabindex="27">
             <div class="error-message" id="receiptEmailError"></div>
           </div>
         </div>
@@ -563,13 +608,13 @@
         <div class="form-group">
           <label for="notes">Notes</label>
           <textarea id="notes" name="notes" rows="2" maxlength="200"
-                    placeholder="Special instructions, warranty info, etc." tabindex="25"></textarea>
+                    placeholder="Special instructions, warranty info, etc." tabindex="28"></textarea>
         </div>
 
         <div class="btn-group">
-          <button type="button" class="btn-secondary" id="addNewItem" tabindex="26">+ Add Item</button>
-          <button type="submit" class="btn-primary" tabindex="27">✅ Complete Sale</button>
-          <button type="button" class="btn-danger" id="clearCart" tabindex="28">🗑️ Clear Cart</button>
+          <button type="button" class="btn-secondary" id="addNewItem" tabindex="29">+ Add Item</button>
+          <button type="submit" class="btn-primary" tabindex="30">✅ Complete Sale</button>
+          <button type="button" class="btn-danger" id="clearCart" tabindex="31">🗑️ Clear Cart</button>
         </div>
       </form>
     </div>
@@ -581,15 +626,15 @@
         <div class="form-group">
           <label class="required">How would you rate your experience?</label>
           <div class="rating">
-            <input type="radio" id="star1" name="rating" value="1" required tabindex="29">
+            <input type="radio" id="star1" name="rating" value="1" required tabindex="32">
             <label for="star1">★</label>
-            <input type="radio" id="star2" name="rating" value="2" tabindex="30">
+            <input type="radio" id="star2" name="rating" value="2" tabindex="33">
             <label for="star2">★</label>
-            <input type="radio" id="star3" name="rating" value="3" tabindex="31">
+            <input type="radio" id="star3" name="rating" value="3" tabindex="34">
             <label for="star3">★</label>
-            <input type="radio" id="star4" name="rating" value="4" tabindex="32">
+            <input type="radio" id="star4" name="rating" value="4" tabindex="35">
             <label for="star4">★</label>
-            <input type="radio" id="star5" name="rating" value="5" tabindex="33">
+            <input type="radio" id="star5" name="rating" value="5" tabindex="36">
             <label for="star5">★</label>
           </div>
           <div class="error-message" id="ratingError"></div>
@@ -598,7 +643,7 @@
         <div class="form-grid">
           <div class="form-group">
             <label for="fbType" class="required">Feedback Type</label>
-            <select id="fbType" name="type" required tabindex="34">
+            <select id="fbType" name="type" required tabindex="37">
               <option value="">Select type</option>
               <option value="compliment">Compliment</option>
               <option value="suggestion">Suggestion</option>
@@ -611,7 +656,7 @@
           <div class="form-group">
             <label for="fbSubject" class="required">Subject</label>
             <input type="text" id="fbSubject" name="subject" required maxlength="100"
-                   placeholder="Brief summary" tabindex="35">
+                   placeholder="Brief summary" tabindex="38">
             <div class="error-message" id="fbSubjectError"></div>
           </div>
         </div>
@@ -619,7 +664,7 @@
         <div class="form-group">
           <label for="fbDetails" class="required">Details</label>
           <textarea id="fbDetails" name="details" rows="4" required maxlength="500"
-                    placeholder="Please share your feedback in detail..." tabindex="36"></textarea>
+                    placeholder="Please share your feedback in detail..." tabindex="39"></textarea>
           <div class="error-message" id="fbDetailsError"></div>
         </div>
 
@@ -627,19 +672,180 @@
           <div class="form-group">
             <label for="fbName">Your Name (Optional)</label>
             <input type="text" id="fbName" name="name" maxlength="100"
-                   placeholder="Anonymous if left blank" tabindex="37">
+                   placeholder="Anonymous if left blank" tabindex="40">
           </div>
 
           <div class="form-group">
             <label for="fbEmail">Email (Optional)</label>
             <input type="email" id="fbEmail" name="email"
-                   placeholder="contact@email.com" tabindex="38">
+                   placeholder="contact@email.com" tabindex="41">
           </div>
         </div>
 
         <div class="btn-group">
-          <button type="submit" class="btn-primary" tabindex="39">📤 Submit Feedback</button>
-          <button type="reset" class="btn-outline" tabindex="40">↺ Clear</button>
+          <button type="submit" class="btn-primary" tabindex="42">📤 Submit Feedback</button>
+          <button type="reset" class="btn-outline" tabindex="43">↺ Clear</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Inventory Management Form (Additional Major Form) -->
+    <div id="inventory" class="form-section">
+      <h2>Inventory Management</h2>
+      <form id="inventoryForm" novalidate>
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="lowStockThreshold" class="required">Low Stock Threshold</label>
+            <input type="number" id="lowStockThreshold" name="threshold" min="1" required tabindex="44">
+            <div class="error-message" id="lowStockThresholdError"></div>
+          </div>
+          <div class="form-group">
+            <label for="reorderLevel" class="required">Reorder Level</label>
+            <input type="number" id="reorderLevel" name="reorder" min="1" required tabindex="45">
+            <div class="error-message" id="reorderLevelError"></div>
+          </div>
+          <div class="form-group">
+            <label for="supplier">Supplier</label>
+            <input type="text" id="supplier" name="supplier" list="supplierList" tabindex="46">
+            <datalist id="supplierList">
+              <option value="Honda Philippines">
+              <option value="Yamaha Philippines">
+              <option value="Aftermarket Parts Inc.">
+              <option value="Kawasaki Distributors">
+              <option value="Bajaj Philippines">
+            </datalist>
+          </div>
+          <div class="form-group">
+            <label for="leadTime">Lead Time (Days)</label>
+            <input type="number" id="leadTime" name="leadTime" min="1" max="365" tabindex="47">
+          </div>
+          <div class="form-group">
+            <label for="minOrderQty">Minimum Order Quantity</label>
+            <input type="number" id="minOrderQty" name="minOrderQty" min="1" tabindex="48">
+          </div>
+          <div class="form-group">
+            <label for="deliveryDate">Expected Delivery Date</label>
+            <input type="date" id="deliveryDate" name="deliveryDate" tabindex="49">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Alert Settings</label>
+          <div class="checkbox-group">
+            <div class="checkbox-option">
+              <input type="checkbox" id="emailAlerts" name="alerts" value="email" checked tabindex="50">
+              <label for="emailAlerts">Email Alerts</label>
+            </div>
+            <div class="checkbox-option">
+              <input type="checkbox" id="smsAlerts" name="alerts" value="sms" tabindex="51">
+              <label for="smsAlerts">SMS Alerts</label>
+            </div>
+            <div class="checkbox-option">
+              <input type="checkbox" id="lowStockAlerts" name="alerts" value="lowStock" checked tabindex="52">
+              <label for="lowStockAlerts">Low Stock Alerts</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="notesInventory">Notes</label>
+          <textarea id="notesInventory" name="notesInventory" rows="3" maxlength="300" tabindex="53"
+                    placeholder="Additional inventory notes..."></textarea>
+        </div>
+
+        <div class="btn-group">
+          <button type="submit" class="btn-primary" tabindex="54">💾 Save Settings</button>
+          <button type="reset" class="btn-outline" tabindex="55">↺ Reset</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Profile Management Form (Additional Supporting Form) -->
+    <div id="profile" class="form-section">
+      <h2>User Profile</h2>
+      <form id="profileForm" novalidate>
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="firstName" class="required">First Name</label>
+            <input type="text" id="firstName" name="firstName" required maxlength="50" tabindex="56">
+            <div class="error-message" id="firstNameError"></div>
+          </div>
+          <div class="form-group">
+            <label for="lastName" class="required">Last Name</label>
+            <input type="text" id="lastName" name="lastName" required maxlength="50" tabindex="57">
+            <div class="error-message" id="lastNameError"></div>
+          </div>
+          <div class="form-group">
+            <label for="employeeId">Employee ID</label>
+            <input type="text" id="employeeId" name="employeeId" readonly tabindex="58">
+          </div>
+          <div class="form-group">
+            <label for="position">Position</label>
+            <select id="position" name="position" tabindex="59">
+              <option value="cashier">Cashier</option>
+              <option value="manager">Manager</option>
+              <option value="admin">Administrator</option>
+              <option value="technician">Technician</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="profileEmail" class="required">Email</label>
+            <input type="email" id="profileEmail" name="email" required tabindex="60">
+            <div class="error-message" id="profileEmailError"></div>
+          </div>
+          <div class="form-group">
+            <label for="phone">Phone Number</label>
+            <input type="tel" id="phone" name="phone" pattern="[0-9]{10,11}" tabindex="61">
+          </div>
+        </div>
+
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="passwordNew">New Password</label>
+            <input type="password" id="passwordNew" name="passwordNew" placeholder="Leave blank to keep current" tabindex="62">
+            <div class="password-strength">
+              <div class="strength-meter" id="profilePasswordStrength"></div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="passwordConfirm">Confirm New Password</label>
+            <input type="password" id="passwordConfirm" name="passwordConfirm" placeholder="Confirm new password" tabindex="63">
+            <div class="error-message" id="passwordConfirmError"></div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="bio">Bio</label>
+          <textarea id="bio" name="bio" rows="3" maxlength="200" tabindex="64"
+                    placeholder="Tell us about yourself..."></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="profileImage">Profile Picture</label>
+          <input type="file" id="profileImage" name="profilePic" accept="image/*" tabindex="65">
+        </div>
+
+        <div class="form-group">
+          <label>Notifications</label>
+          <div class="checkbox-group">
+            <div class="checkbox-option">
+              <input type="checkbox" id="emailNotifications" name="notifications" value="email" checked tabindex="66">
+              <label for="emailNotifications">Email Notifications</label>
+            </div>
+            <div class="checkbox-option">
+              <input type="checkbox" id="smsNotifications" name="notifications" value="sms" tabindex="67">
+              <label for="smsNotifications">SMS Notifications</label>
+            </div>
+            <div class="checkbox-option">
+              <input type="checkbox" id="pushNotifications" name="notifications" value="push" checked tabindex="68">
+              <label for="pushNotifications">Push Notifications</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="btn-group">
+          <button type="submit" class="btn-primary" tabindex="69">💾 Update Profile</button>
+          <button type="reset" class="btn-outline" tabindex="70">↺ Reset</button>
         </div>
       </form>
     </div>
@@ -671,8 +877,48 @@
     // Initialize
     document.addEventListener('DOMContentLoaded', () => {
       setupEventListeners();
-      loadProducts(); // Preload products if any
+      loadProducts();
+      setMinDate();
+      setupPasswordStrength();
     });
+
+    // Set minimum date for date inputs
+    function setMinDate() {
+      const today = new Date().toISOString().split('T')[0];
+      document.getElementById('warrantyExpiry').min = today;
+      document.getElementById('deliveryDate').min = today;
+    }
+
+    // Setup password strength meters
+    function setupPasswordStrength() {
+      const loginPassword = document.getElementById('loginPassword');
+      const profilePassword = document.getElementById('passwordNew');
+      
+      loginPassword.addEventListener('input', (e) => checkPasswordStrength(e.target.value, 'passwordStrength'));
+      profilePassword.addEventListener('input', (e) => checkPasswordStrength(e.target.value, 'profilePasswordStrength'));
+    }
+
+    function checkPasswordStrength(password, elementId) {
+      const strengthMeter = document.getElementById(elementId);
+      strengthMeter.className = 'strength-meter';
+      
+      if (password.length === 0) return;
+      
+      let strength = 0;
+      if (password.length >= 8) strength++;
+      if (/[A-Z]/.test(password)) strength++;
+      if (/[a-z]/.test(password)) strength++;
+      if (/[0-9]/.test(password)) strength++;
+      if (/[^A-Za-z0-9]/.test(password)) strength++;
+      
+      if (strength < 3) {
+        strengthMeter.classList.add('strength-weak');
+      } else if (strength < 5) {
+        strengthMeter.classList.add('strength-medium');
+      } else {
+        strengthMeter.classList.add('strength-strong');
+      }
+    }
 
     // Tab Navigation
     function setupEventListeners() {
@@ -693,6 +939,8 @@
       document.getElementById('productForm').addEventListener('submit', handleProduct);
       document.getElementById('posForm').addEventListener('submit', handlePOS);
       document.getElementById('feedbackForm').addEventListener('submit', handleFeedback);
+      document.getElementById('inventoryForm').addEventListener('submit', handleInventory);
+      document.getElementById('profileForm').addEventListener('submit', handleProfile);
 
       // POS-specific
       document.getElementById('searchProduct').addEventListener('input', searchProducts);
@@ -711,6 +959,20 @@
           productSuggestions.children[0].click();
         }
       });
+
+      // Discount slider
+      document.getElementById('discountSlider').addEventListener('input', function() {
+        document.getElementById('discountValue').textContent = this.value;
+        document.getElementById('discount').value = this.value;
+      });
+
+      document.getElementById('discount').addEventListener('input', function() {
+        document.getElementById('discountSlider').value = this.value;
+        document.getElementById('discountValue').textContent = this.value;
+      });
+
+      // Category filter
+      document.getElementById('productCategoryFilter').addEventListener('change', filterProducts);
     }
 
     // === FORM HANDLERS ===
@@ -816,6 +1078,7 @@
         showSuccess(`✅ Product "${name}" saved successfully!`);
         document.getElementById('productForm').reset();
         document.getElementById('isActive').checked = true; // reset toggle
+        setMinDate(); // reset date min
       }
     }
 
@@ -894,6 +1157,8 @@
         // Reset form
         document.getElementById('posForm').reset();
         clearCart();
+        document.getElementById('discountValue').textContent = '0';
+        document.getElementById('discountSlider').value = '0';
       }
     }
 
@@ -960,6 +1225,105 @@
       }
     }
 
+    function handleInventory(e) {
+      e.preventDefault();
+      
+      const threshold = parseInt(document.getElementById('lowStockThreshold').value);
+      const reorder = parseInt(document.getElementById('reorderLevel').value);
+      
+      let valid = true;
+
+      if (isNaN(threshold) || threshold <= 0) {
+        showError('lowStockThresholdError', 'Low stock threshold must be greater than 0');
+        valid = false;
+      } else {
+        clearError('lowStockThresholdError');
+      }
+
+      if (isNaN(reorder) || reorder <= 0) {
+        showError('reorderLevelError', 'Reorder level must be greater than 0');
+        valid = false;
+      } else {
+        clearError('reorderLevelError');
+      }
+
+      if (valid) {
+        const inventorySettings = {
+          lowStockThreshold: threshold,
+          reorderLevel: reorder,
+          supplier: document.getElementById('supplier').value,
+          leadTime: document.getElementById('leadTime').value || null,
+          minOrderQty: document.getElementById('minOrderQty').value || null,
+          deliveryDate: document.getElementById('deliveryDate').value || null,
+          alerts: Array.from(document.querySelectorAll('input[name="alerts"]:checked')).map(cb => cb.value),
+          notes: document.getElementById('notesInventory').value || null,
+          timestamp: new Date().toISOString()
+        };
+
+        localStorage.setItem('inventorySettings', JSON.stringify(inventorySettings));
+        showSuccess('📦 Inventory settings saved successfully!');
+      }
+    }
+
+    function handleProfile(e) {
+      e.preventDefault();
+      
+      const firstName = document.getElementById('firstName').value.trim();
+      const lastName = document.getElementById('lastName').value.trim();
+      const email = document.getElementById('profileEmail').value.trim();
+      const newPassword = document.getElementById('passwordNew').value;
+      const confirmPassword = document.getElementById('passwordConfirm').value;
+      
+      let valid = true;
+
+      if (!firstName) {
+        showError('firstNameError', 'First name is required');
+        valid = false;
+      } else {
+        clearError('firstNameError');
+      }
+
+      if (!lastName) {
+        showError('lastNameError', 'Last name is required');
+        valid = false;
+      } else {
+        clearError('lastNameError');
+      }
+
+      if (!email) {
+        showError('profileEmailError', 'Email is required');
+        valid = false;
+      } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        showError('profileEmailError', 'Invalid email format');
+        valid = false;
+      } else {
+        clearError('profileEmailError');
+      }
+
+      if (newPassword && newPassword !== confirmPassword) {
+        showError('passwordConfirmError', 'Passwords do not match');
+        valid = false;
+      } else {
+        clearError('passwordConfirmError');
+      }
+
+      if (valid) {
+        const profile = {
+          firstName,
+          lastName,
+          email,
+          position: document.getElementById('position').value,
+          phone: document.getElementById('phone').value,
+          bio: document.getElementById('bio').value,
+          notifications: Array.from(document.querySelectorAll('input[name="notifications"]:checked')).map(cb => cb.value),
+          lastUpdated: new Date().toISOString()
+        };
+
+        localStorage.setItem('userProfile', JSON.stringify(profile));
+        showSuccess('👤 Profile updated successfully!');
+      }
+    }
+
     // === HELPER FUNCTIONS ===
 
     function searchProducts() {
@@ -997,6 +1361,13 @@
       });
 
       productSuggestions.style.display = 'block';
+    }
+
+    function filterProducts() {
+      const category = this.value;
+      if (category) {
+        showSuccess(`Filtering products by category: ${category}`);
+      }
     }
 
     function addToCart(product) {
