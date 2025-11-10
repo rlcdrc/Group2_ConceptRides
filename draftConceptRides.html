@@ -75,7 +75,7 @@
       background: rgba(30, 40, 50, 0.8);
       border-radius: 10px;
       padding: 25px;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.5);
       margin-bottom: 30px;
     }
 
@@ -294,11 +294,11 @@
       border-bottom: none;
     }
 
-    /* Feedback Rating */
+    /* Feedback Rating - HORIZONTAL STARS */
     .rating {
-      unicode-bidi: bidi-override;
-      direction: rtl;
-      text-align: center;
+      display: flex;
+      align-items: center;
+      gap: 4px;
       font-size: 30px;
       color: #ddd;
     }
@@ -309,6 +309,7 @@
 
     .rating label {
       cursor: pointer;
+      transition: color 0.2s;
     }
 
     .rating input:checked ~ label,
@@ -580,16 +581,16 @@
         <div class="form-group">
           <label class="required">How would you rate your experience?</label>
           <div class="rating">
-            <input type="radio" id="star5" name="rating" value="5" required tabindex="29">
-            <label for="star5">★</label>
-            <input type="radio" id="star4" name="rating" value="4" tabindex="30">
-            <label for="star4">★</label>
+            <input type="radio" id="star1" name="rating" value="1" required tabindex="29">
+            <label for="star1">★</label>
+            <input type="radio" id="star2" name="rating" value="2" tabindex="30">
+            <label for="star2">★</label>
             <input type="radio" id="star3" name="rating" value="3" tabindex="31">
             <label for="star3">★</label>
-            <input type="radio" id="star2" name="rating" value="2" tabindex="32">
-            <label for="star2">★</label>
-            <input type="radio" id="star1" name="rating" value="1" tabindex="33">
-            <label for="star1">★</label>
+            <input type="radio" id="star4" name="rating" value="4" tabindex="32">
+            <label for="star4">★</label>
+            <input type="radio" id="star5" name="rating" value="5" tabindex="33">
+            <label for="star5">★</label>
           </div>
           <div class="error-message" id="ratingError"></div>
         </div>
